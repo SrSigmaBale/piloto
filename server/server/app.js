@@ -1,7 +1,7 @@
 const html = require("../xlsx/xlsx.js")
 const express = require('express')
 const app = express()
-const cors = require('cors')
+// const cors = require('cors')
 const trataErros = require('../middleware/trataErros.js')
 const security = require('./login.js')
 const autenticado = require('../middleware/autenticado.js')
