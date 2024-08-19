@@ -1,4 +1,4 @@
-const url = 'https://piloto-server.vercel.app/app'
+const url = 'https://piloto-server.vercel.app'
 async function init() {
     debugger
     try{
