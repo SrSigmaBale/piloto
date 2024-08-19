@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000'
+const url = 'https://piloto-server.vercel.app'
 async function init() {
     debugger
     try{
