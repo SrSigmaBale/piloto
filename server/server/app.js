@@ -1,26 +1,31 @@
 const html = require("../xlsx/xlsx.js")
 const express = require('express')
 const app = express()
-// const cors = require('cors')
+const cors = require('cors')
 const trataErros = require('../middleware/trataErros.js')
 const security = require('./login.js')
 const autenticado = require('../middleware/autenticado.js')
 
-const allowCors = (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', 'https://piloto-client.vercel.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+// const allowCors = (req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     res.setHeader('Access-Control-Allow-Origin', 'https://piloto-client.vercel.app');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
     
-    if (req.method === 'OPTIONS') {
-      return res.status(200).end();
-    }
+//     if (req.method === 'OPTIONS') {
+//       return res.status(200).end();
+//     }
   
-    next();
-  };
-// https://piloto-client.vercel.app
+//     next();
+//   };
+// // https://piloto-client.vercel.app
 
-app.use(allowCors)
+// app.use(allowCors)
+app.use(cors({
+    origin: 'https://piloto-client.vercel.app', // Substitua pelo domínio do frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type']
+  }));
 app.use(express.json());
 
 app.get('/', (req, res)=> {
@@ -73,6 +78,4 @@ app.listen(3000, ()=> {
     console.log('faz o L')
 })
 
-module.exports = app
-
-            
+module.exports = app            
