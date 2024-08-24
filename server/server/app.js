@@ -43,6 +43,8 @@ app.post('/security', async (req, res, next) => {
 
 app.get('/tabelancm',autenticado, (req,res,next) => {
     if(html) {
+        const limit = req.query.limit
+        html.splice(-limit, limit) 
         res.status(200).json(html)
     }
     else {

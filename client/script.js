@@ -24,7 +24,7 @@ function loading(show) {
 async function conecta(){
     debugger
     let accessToken = localStorage.getItem('accessToken')
-    const response = await fetch(url+'/tabelancm', {
+    const response = await fetch(url+'/tabelancm?limit=10000', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
