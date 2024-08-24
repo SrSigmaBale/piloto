@@ -15,8 +15,9 @@ for (let i = 0; i < sheets.length; i++) {
         header: headers,
         defval: null
     });
-    sheetData = sheetData.slice(14000); // Removendo as quatro primeiras linhas
+    sheetData = sheetData.slice(13000); // Removendo as quatro primeiras linhas
     data = data.concat(sheetData);
 }
+// 15115 +4
 
 module.exports = data;
