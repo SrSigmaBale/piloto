@@ -31,6 +31,7 @@ async function conecta(){
             'Authorization': `Bearer ${accessToken}`
         }})
     const data = await response.json()
+    console.log(data)
     verificacaoErro(data)
     return data
 }
