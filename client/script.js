@@ -1,8 +1,10 @@
-const url = 'https://piloto-server.vercel.app'
+const url = 'http://localhost:3000'
+let limit = '5000'
 async function init() {
     debugger
     try{
         const data = await conecta()
+        console.log(data)
         verificacaoErro(data)
     }
     catch(erro){
@@ -24,14 +26,13 @@ function loading(show) {
 async function conecta(){
     debugger
     let accessToken = localStorage.getItem('accessToken')
-    const response = await fetch(url+'/tabelancm?limit=10000', {
+    const response = await fetch(`${url}/tabelancm?limit=${limit}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
         }})
     const data = await response.json()
-    console.log(data)
     verificacaoErro(data)
     return data
 }
@@ -66,6 +67,10 @@ async function showExcel(data) {
             `
             div.appendChild(elementoTabela)
         })
+        const mostrarMais = document.createElement('button')
+        mostrarMais.innerHTML = "Mostrar Mais"
+        mostrarMais.id = 'MostrarMais'
+        div.append(mostrarMais)
     }
     catch(error) {
         criaErro('Falha no Servidor')
@@ -175,7 +180,7 @@ if(botao){
             const data = await conecta()
             if(verificacaoErro(data)){
                 return;
-            }
+            }            
             botao.classList.add('hidden')
             header.appendChild(form)
             await showExcel(data)
@@ -186,6 +191,16 @@ if(botao){
         finally{
             loading(false)
         }
+    })
+}
+
+const mostrarMais = document.querySelector('#MostrarMais')
+console.log(mostrarMais)
+if(mostrarMais){
+    mostrarMais.addEventListener('click', async () =>{
+        console.log('legal')
+        limit += 5000
+        await getExcel()
     })
 }
 

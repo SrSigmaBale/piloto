@@ -22,7 +22,7 @@ const autenticado = require('../middleware/autenticado.js')
 
 // app.use(allowCors)
 app.use(cors({
-    origin: 'https://piloto-client.vercel.app', // Substitua pelo domínio do frontend
+    origin: '*', // Substitua pelo domínio do frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Authorization', 'Content-Type']
   }));
@@ -44,7 +44,7 @@ app.post('/security', async (req, res, next) => {
 app.get('/tabelancm',autenticado, (req,res,next) => {
     if(html) {
         const limit = req.query.limit
-        html.splice(-limit, limit) 
+        html.length = limit
         res.status(200).json(html)
     }
     else {
