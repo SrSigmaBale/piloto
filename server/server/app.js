@@ -41,11 +41,13 @@ app.post('/security', async (req, res, next) => {
     res.status(201).json(securityResponse)
 })
 
-app.get('/tabelancm',autenticado, (req,res,next) => {
+app.get('/tabelancm', (req,res,next) => {
     if(html) {
         const limit = req.query.limit
-        html.length = limit
-        res.status(200).json(html)
+        const page = req.query.page
+        let skip = (page - 1) * 5000
+        const paginatedHtml = html.slice(skip, limit)
+        res.status(200).json(paginatedHtml)
     }
     else {
         const error = new Error('Erro no Excel')

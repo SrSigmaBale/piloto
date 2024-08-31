@@ -1,10 +1,9 @@
 const url = 'http://localhost:3000'
-let limit = '5000'
+let limit = 5000
+let page = 1
 async function init() {
-    debugger
     try{
         const data = await conecta()
-        console.log(data)
         verificacaoErro(data)
     }
     catch(erro){
@@ -24,20 +23,21 @@ function loading(show) {
     }
 }
 async function conecta(){
-    debugger
     let accessToken = localStorage.getItem('accessToken')
-    const response = await fetch(`${url}/tabelancm?limit=${limit}`, {
+    const response = await fetch(`${url}/tabelancm?limit=${limit}&page=${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
         }})
     const data = await response.json()
+    console.log(response.url)
     verificacaoErro(data)
     return data
 }
 async function showExcel(data) {
     try {
+        debugger
         const div = document.querySelector('.conteiner_table')
         div.innerHTML = ""
         document.querySelector('img').style.display = 'none'
@@ -71,6 +71,7 @@ async function showExcel(data) {
         mostrarMais.innerHTML = "Mostrar Mais"
         mostrarMais.id = 'MostrarMais'
         div.append(mostrarMais)
+        pagination()
     }
     catch(error) {
         criaErro('Falha no Servidor')
@@ -101,6 +102,7 @@ function verificacaoErro(data) {
 async function getExcel() {
     try {
         const data = await conecta();
+        console.log(data)
         if(verificacaoErro(data)) {
             return;
         }
@@ -194,12 +196,12 @@ if(botao){
     })
 }
 
-const mostrarMais = document.querySelector('#MostrarMais')
-console.log(mostrarMais)
-if(mostrarMais){
+function pagination(){
+    const mostrarMais = document.querySelector('#MostrarMais')
     mostrarMais.addEventListener('click', async () =>{
-        console.log('legal')
+        page ++
         limit += 5000
+        console.log(limit)
         await getExcel()
     })
 }
