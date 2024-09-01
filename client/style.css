@@ -13,6 +13,14 @@ h1{
     transform: translate(-50%, -50%);
     z-index: 1001; /* Para garantir que fique acima de outros elementos */
 }
+h2{
+    position: relative;
+    font-size: 40px;
+    font-weight: bold;
+    border-radius: 5px;
+    min-width: 40px; /* Defina uma largura mínima para garantir que o conteúdo esteja centralizado */
+    text-align: center;
+}
 
 .hidden{
     display: none;
@@ -83,6 +91,25 @@ body {
     gap: 10px;
     padding: 10px;
     margin-top: 100px;
+}
+.conteiner_table #mostrarMenos_btn{
+    background-image: url('./img/left-arrow.png');
+    background-size: cover;
+    background-color: transparent;
+    width: 40px;  /* Defina a largura desejada */
+    height: 40px; /* Defina a altura desejada */
+    border: none; /* Remove a borda padrão */
+    filter: brightness(0) invert(1); /* Converte a imagem para branco */
+}
+
+.conteiner_table #mostrarMais_btn{
+    background-image: url('./img/right-arrow.png');
+    background-size: cover;
+    background-color: transparent;
+    width: 40px;  /* Defina a largura desejada */
+    height: 40px; /* Defina a altura desejada */
+    border: none; /* Remove a borda padrão */
+    filter: brightness(0) invert(1); /* Converte a imagem para branco */
 }
 
 tr {

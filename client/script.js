@@ -1,6 +1,6 @@
 const url = 'http://localhost:3000'
 let limit = 5000
-let page = 1
+let page = 5
 async function init() {
     try{
         const data = await conecta()
@@ -67,11 +67,7 @@ async function showExcel(data) {
             `
             div.appendChild(elementoTabela)
         })
-        const mostrarMais = document.createElement('button')
-        mostrarMais.innerHTML = "Mostrar Mais"
-        mostrarMais.id = 'MostrarMais'
-        div.append(mostrarMais)
-        pagination()
+        pagination(div)
     }
     catch(error) {
         criaErro('Falha no Servidor')
@@ -196,14 +192,37 @@ if(botao){
     })
 }
 
-function pagination(){
-    const mostrarMais = document.querySelector('#MostrarMais')
+function pagination(div){
+    const mostrarMenos = document.createElement('button')
+    mostrarMenos.id = "mostrarMenos_btn"
+    div.append(mostrarMenos)
+    const numPages = document.createElement('h2')
+    numPages.innerHTML = page
+    div.append(numPages)
+    const mostrarMais = document.createElement('button')
+    mostrarMais.id = "mostrarMais_btn"
+    div.append(mostrarMais)
+
+    if(page >= 3){
+        mostrarMais.classList.add('hidden')
+    }
+    else if(page <= 1){
+        mostrarMenos.classList.add('hidden')
+    }
+
     mostrarMais.addEventListener('click', async () =>{
         page ++
         limit += 5000
         console.log(limit)
         await getExcel()
     })
+    mostrarMenos.addEventListener('click', async () =>{
+        page --
+        limit -= 5000
+        console.log(limit)
+        await getExcel()
+    })
+
 }
 
 function criaErro(erro, type) {
