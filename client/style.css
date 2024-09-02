@@ -212,5 +212,5 @@ img{
     transform: translate(-50%, 80%);
     width: 200px;
     height: auto;
-    border-radius: 10px;
+    border-radius: 10px; 
 }

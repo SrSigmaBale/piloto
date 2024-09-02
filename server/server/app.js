@@ -56,7 +56,7 @@ app.get('/tabelancm', (req,res,next) => {
     }
 })
     
-app.get('/tabelancm/:codigo',autenticado, (req, res,next) => {
+app.get('/tabelancm/:codigo', (req, res,next) => {
     const codigo = req.params['codigo']
     const element = html.filter((element) => element.Codigo.startsWith(codigo));
     const regex = /[a-zA-Z]/;

@@ -1,18 +1,28 @@
-const url = 'http://localhost:3000'
-let limit = 5000
-let page = 5
-async function init() {
-    try{
-        const data = await conecta()
-        verificacaoErro(data)
-    }
-    catch(erro){
-        criaErro('Falha no Servidor', 2)
-    }
-}
+const url = 'https://piloto-server.vercel.app'
+let page = 1
+let limit = 5000 * page
 if(document.querySelector('.carregando')){
     document.querySelector('.carregando').classList.add('carregando--hidden');
-    init()
+    getData(`${url}/tabelancm?limit=${limit}&page=${page}`, 'GET')
+        .then((data)=>{
+            verificacaoErro(data)
+        })
+        .catch((error)=>{
+            criaErro('Falha no Servidor', 2)
+        })
+}
+
+async function getData(url, method){
+    let accessToken = localStorage.getItem('accessToken')
+    const response = await fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }})
+    console.log(response.url)
+    const data = await response.json()
+    return data
 }
 
 function loading(show) {
@@ -23,24 +33,29 @@ function loading(show) {
     }
 }
 async function conecta(){
-    let accessToken = localStorage.getItem('accessToken')
-    const response = await fetch(`${url}/tabelancm?limit=${limit}&page=${page}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-        }})
-    const data = await response.json()
-    console.log(response.url)
+    const data = await getData(`${url}/tabelancm?limit=${limit}&page=${page}`, 'GET')
     verificacaoErro(data)
     return data
 }
+function showElement(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.style.display = 'block';
+    }
+}
+
+function hideElement(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.style.display = 'none';
+    }
+}
+
 async function showExcel(data) {
     try {
-        debugger
         const div = document.querySelector('.conteiner_table')
         div.innerHTML = ""
-        document.querySelector('img').style.display = 'none'
+        hideElement('img')
         const headerTabela = document.createElement('tr')
         headerTabela.innerHTML = `
         <td>Codigo</td>
@@ -98,25 +113,14 @@ function verificacaoErro(data) {
 async function getExcel() {
     try {
         const data = await conecta();
-        console.log(data)
-        if(verificacaoErro(data)) {
-            return;
-        }
         showExcel(data);
     } catch(erro) {
         criaErro('Falha no Servidor');
     }
 }
 async function getByNameExcel(code) {
-    let accessToken = localStorage.getItem('accessToken')
     try {
-        const response = await fetch(url+`/tabelancm/${code}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
-            }})
-        const data = await response.json()
+        const data = await getData(`${url}/tabelancm/${code}`, 'GET')
         if(verificacaoErro(data)) {
             return;
         }
@@ -125,7 +129,6 @@ async function getByNameExcel(code) {
     }
     catch(erro){
         criaErro('Falha no servidor')
-        throw new Error(erro)
     }
 }
 async function showByNameExcel(valorPesquisa){
@@ -146,7 +149,7 @@ if(!document.querySelector('.login')){
             div.innerHTML = ""
             div.appendChild(form)
             botao.classList.remove('hidden')
-            document.querySelector('img').style.display = 'block'
+            showElement('img')
             barraPesquisa.focus();
             return;
         }
@@ -203,7 +206,7 @@ function pagination(div){
     mostrarMais.id = "mostrarMais_btn"
     div.append(mostrarMais)
 
-    if(page >= 3){
+    if(page >= 4){
         mostrarMais.classList.add('hidden')
     }
     else if(page <= 1){
@@ -212,15 +215,25 @@ function pagination(div){
 
     mostrarMais.addEventListener('click', async () =>{
         page ++
-        limit += 5000
-        console.log(limit)
-        await getExcel()
+        try{
+            loading(true)
+            await getExcel()
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        finally{
+            loading(false)
+        }
     })
     mostrarMenos.addEventListener('click', async () =>{
         page --
-        limit -= 5000
-        console.log(limit)
-        await getExcel()
+        try{
+            loading(true)
+            await getExcel()
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        finally{
+            loading(false)
+        }
     })
 
 }
@@ -229,7 +242,7 @@ function criaErro(erro, type) {
     if(type == 2){
         document.querySelector('#formPesquisa').innerHTML = ''
         document.querySelector('.conteiner_table').innerHTML = ''
-        document.querySelector('img').style.display = 'none'
+        hideElement('img')
         const msgErro = document.createElement('h1')
         msgErro.textContent = erro
         const tabela = document.querySelector('.conteiner_table')
