@@ -82,7 +82,7 @@ async function showExcel(data) {
             `
             div.appendChild(elementoTabela)
         })
-        pagination(div)
+        pagination(document.querySelector('.divPagination'))
     }
     catch(error) {
         criaErro('Falha no Servidor')
@@ -138,11 +138,20 @@ async function showByNameExcel(valorPesquisa){
     }
     await getByNameExcel(valorPesquisa)
 }
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+
 const barraPesquisa = document.querySelector('#barraPesquisa')
 const header = document.querySelector('header')
 const form = document.querySelector("form")
 if(!document.querySelector('.login')){
-    barraPesquisa.addEventListener('keyup', async () => {
+    barraPesquisa.addEventListener('keyup', debounce(async () => {
         const valorPesquisa = barraPesquisa.value
         if(valorPesquisa == '') {
             const div = document.querySelector('.conteiner_table')
@@ -166,11 +175,12 @@ if(!document.querySelector('.login')){
             criaErro("Falha no Servidor", 2)
         }
         finally {
+            hideElement('.divPagination')
             loading(false)
             barraPesquisa.focus();
         }
 
-})}
+}, 300))}
 
 const botao = document.querySelector('#showTableButton')
 if(botao){
@@ -196,6 +206,7 @@ if(botao){
 }
 
 function pagination(div){
+    div.innerHTML = ""
     const mostrarMenos = document.createElement('button')
     mostrarMenos.id = "mostrarMenos_btn"
     div.append(mostrarMenos)
@@ -207,10 +218,14 @@ function pagination(div){
     div.append(mostrarMais)
 
     if(page >= 4){
-        mostrarMais.classList.add('hidden')
+        mostrarMais.addEventListener('click', ()=> {
+            console.log('')
+        })
     }
     else if(page <= 1){
-        mostrarMenos.classList.add('hidden')
+        mostrarMenos.addEventListener('click', ()=> {
+            console.log('')
+        })
     }
 
     mostrarMais.addEventListener('click', async () =>{

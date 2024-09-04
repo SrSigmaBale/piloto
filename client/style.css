@@ -92,7 +92,7 @@ body {
     padding: 10px;
     margin-top: 100px;
 }
-.conteiner_table #mostrarMenos_btn{
+#mostrarMenos_btn{
     background-image: url('./img/left-arrow.png');
     background-size: cover;
     background-color: transparent;
@@ -102,7 +102,7 @@ body {
     filter: brightness(0) invert(1); /* Converte a imagem para branco */
 }
 
-.conteiner_table #mostrarMais_btn{
+#mostrarMais_btn{
     background-image: url('./img/right-arrow.png');
     background-size: cover;
     background-color: transparent;
@@ -213,4 +213,12 @@ img{
     width: 200px;
     height: auto;
     border-radius: 10px; 
+}
+.divPagination {
+    display: flex;
+    justify-content: center; /* Alinha os itens no centro da linha */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+    margin-left: 4.5em;
+    margin-bottom: 0;
+    gap: 200px
 }
