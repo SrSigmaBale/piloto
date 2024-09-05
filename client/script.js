@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000'
+const url = 'https://piloto-server.vercel.app'
 // https://piloto-server.vercel.app
 // http://localhost:3000
 let page = 1
