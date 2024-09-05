@@ -41,7 +41,7 @@ app.post('/security', async (req, res, next) => {
     res.status(201).json(securityResponse)
 })
 
-app.get('/tabelancm', (req,res,next) => {
+app.get('/tabelancm',autenticado, (req,res,next) => {
     if(html) {
         const limit = req.query.limit
         const page = req.query.page
@@ -56,7 +56,7 @@ app.get('/tabelancm', (req,res,next) => {
     }
 })
     
-app.get('/tabelancm/:codigo', (req, res,next) => {
+app.get('/tabelancm/:codigo',autenticado, (req, res,next) => {
     const codigo = req.params['codigo']
     const element = html.filter((element) => element.Codigo.startsWith(codigo));
     const regex = /[a-zA-Z]/;

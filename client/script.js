@@ -1,6 +1,8 @@
-const url = 'https://piloto-server.vercel.app'
+const url = 'http://localhost:3000'
+// https://piloto-server.vercel.app
+// http://localhost:3000
 let page = 1
-let limit = 5000 * page
+let limit = 5000
 if(document.querySelector('.carregando')){
     document.querySelector('.carregando').classList.add('carregando--hidden');
     getData(`${url}/tabelancm?limit=${limit}&page=${page}`, 'GET')
@@ -20,7 +22,6 @@ async function getData(url, method){
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
         }})
-    console.log(response.url)
     const data = await response.json()
     return data
 }
@@ -193,6 +194,7 @@ if(botao){
                 return;
             }            
             botao.classList.add('hidden')
+            document.querySelector('.divPagination').style.display = 'flex'
             header.appendChild(form)
             await showExcel(data)
         } 
@@ -217,39 +219,36 @@ function pagination(div){
     mostrarMais.id = "mostrarMais_btn"
     div.append(mostrarMais)
 
-    if(page >= 4){
-        mostrarMais.addEventListener('click', ()=> {
-            console.log('')
+    if(page > 1){
+        mostrarMenos.addEventListener('click', async () =>{
+            limit -= 5000
+            page --
+            try{
+                loading(true)
+                await getExcel()
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            finally{
+                loading(false)
+            }
         })
+        
     }
-    else if(page <= 1){
-        mostrarMenos.addEventListener('click', ()=> {
-            console.log('')
+    if(page < 4){
+        mostrarMais.addEventListener('click', async () =>{
+            limit += 5000
+            page ++
+            try{
+                loading(true)
+                await getExcel()
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            finally{
+                loading(false)
+            }
         })
     }
 
-    mostrarMais.addEventListener('click', async () =>{
-        page ++
-        try{
-            loading(true)
-            await getExcel()
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        finally{
-            loading(false)
-        }
-    })
-    mostrarMenos.addEventListener('click', async () =>{
-        page --
-        try{
-            loading(true)
-            await getExcel()
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        finally{
-            loading(false)
-        }
-    })
 
 }
 
