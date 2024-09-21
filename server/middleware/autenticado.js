@@ -1,5 +1,12 @@
-const { verify, decode } = require('jsonwebtoken')
-const secret = require('../config/secret.js')
+require('dotenv').config();
+const { verify, decode } = require('jsonwebtoken');
+// const { password } = require('../config/secret');
+// const secret = require('../config/secret.js')
+const secret = {
+    secret: process.env.SECRET,
+    password: process.env.PASSWORD
+}
+
 
 module.exports = async (req , res, next) => {
     const token = req.headers.authorization

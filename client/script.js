@@ -159,6 +159,7 @@ if(!document.querySelector('.login')){
             div.innerHTML = ""
             div.appendChild(form)
             botao.classList.remove('hidden')
+            hideElement('.divPagination')
             showElement('img')
             barraPesquisa.focus();
             return;
